@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trigger Script</title>
+    <script>
+        function triggerScript() {
+            // Здесь можете добавить код для воспроизведения звука или других действий
+            console.log('Сработал скрипт из Telegram!');
+        }
+
+        // Вызов функции triggerScript при загрузке страницы
+        window.onload = function() {
+            // Получаем кнопку по id
+            var button = document.getElementById("startfun");
+            // Назначаем функцию triggerScript на событие click кнопки
+            button.onclick = triggerScript;
+        };
+    </script>
+</head>
+<body>
+    <h1>Trigger Script Example</h1>
+    <button id="startfun">Нажми для запуска скрипта</button>
+</body>
+</html>
