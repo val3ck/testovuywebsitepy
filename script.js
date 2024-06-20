@@ -1,52 +1,29 @@
-const express = require("express");
-const http = require("http");
-const WebSocket = require("ws");
-const path = require("path");
+const WebSocket = require('ws');
+const https = require('https');
+const fs = require('fs');
+const express = require('express');
 
 const app = express();
-const server = http.createServer(app);
+const server = https.createServer({
+  key: fs.readFileSync('/path/to/your/ssl/key.pem'),
+  cert: fs.readFileSync('/path/to/your/ssl/cert.pem')
+}, app);
+
 const wss = new WebSocket.Server({ server });
 
-// Serve the HTML content
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
-wss.on("connection", (ws) => {
-  console.log("Client connected");
+wss.on('connection', (ws) => {
+  console.log('New client connected');
 
-  ws.on("message", (message) => {
-    console.log(`Received message: ${message}`);
-    try {
-      const msg = JSON.parse(message);
-      if (msg.action === "play_audio") {
-        // Broadcast the message to all connected clients
-        wss.clients.forEach((client) => {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ action: "play_audio" }));
-          }
-        });
-      } else if (msg.action === "telegram_play_sound") {
-        // Handle the telegram play sound action
-        console.log("Received telegram play sound action");
-        // You can add additional logic here if needed
-        wss.clients.forEach((client) => {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ action: "play_audio" }));
-          }
-        });
-      }
-    } catch (error) {
-      console.error("Error parsing message:", error);
-    }
+  ws.on('message', (message) => {
+    console.log('Received:', message);
+    ws.send(`Echo: ${message}`);
   });
 
-  ws.on("close", () => {
-    console.log("Client disconnected");
+  ws.on('close', () => {
+    console.log('Client disconnected');
   });
 });
 
-// Start the server
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
+server.listen(9001, () => {
+  console.log('WebSocket server is running on port 9001');
 });
