@@ -1,14 +1,12 @@
 {
-  "name": "websocket-server",
+  "name": "websocket-audio-player",
   "version": "1.0.0",
-  "description": "A simple WebSocket server",
-  "main": "server.js",
+  "main": "script.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node script.js"
   },
   "dependencies": {
     "express": "^4.17.1",
-    "ws": "^7.4.6",
-    "https": "^1.0.0"
+    "ws": "^7.4.6"
   }
 }
